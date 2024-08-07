@@ -58,7 +58,7 @@ select
 where bbi_rnk=1
 group by 1,2,3
 
--------- PURPLE_CAP --------
+------------------------------------------------- PURPLE_CAP -------------------------------------------------
 CREATE TABLE PURPLE_CAP as 
 select  
 a.SEASON,
@@ -80,8 +80,10 @@ from INNS_STATS a
 join 
 BBI_WICKETS b on a.PLAYER_ID=b.bowler
 Order by season asc, wkts desc;
--------------------------------------------------
------MOST_MADINS----
+
+
+
+-------------------------------------------------MOST_MADINS-------------------------------------------------
 CREATE TABLE Most_Maidens as 
 select  
 a.SEASON,
@@ -97,8 +99,8 @@ b.MAID,
 a.AVG,
 a.ECON,
 a.SR,
-a.four_wick as "4W",
-a.five_wick as "5W"
+a."4W",
+a."5W"
 from INNS_STATS a
 join 
 (select season,bowler,b.player_name,count(*) as MAID
@@ -106,28 +108,34 @@ from (
 select season,match_id,bowler,over_id,
 sum(runs_scored+bowler_extras) as runs,
 count(ball_id) as ball_count
-from cricket_match_data --where season=2009  and bowler=73 
+from cricket_match_data 
 group by 1,2,3,4 
 having sum(runs_scored+bowler_extras)=0 and count(ball_id) >=6 ) a
 join 
 player_data b on a.bowler=b.player_id
-group by 1,2,3)  b  on a.seaon=b.season and a.bowler=b.bowler 
+group by 1,2,3)  b  on a.season=b.season and a.player_id=b.bowler 
 order by season asc, MAID desc
 
 
---------- DOT BALLS -----
+------------------------------------------------- MOST DOT BALLS -------------------------------------------------
 
 
 CREATE TABLE dot_balls as 
-select season,match_id,bowler,count(*) as DOTS
-from cricket_match_data a
-join player_data b on a.bowler=b.player_id 
+select 
+	season,
+	match_id,
+	bowler,
+	count(*) as DOTS
+from 
+	cricket_match_data a
+join 
+	player_data b on a.bowler=b.player_id 
 where runs_scored+extra_runs+bowler_extras+extra_runs=0
 group by 1,2,3
 
 
 
-CREATE TABLE Most_dots as 
+CREATE TABLE Most_dots_balls as 
 select  
 a.SEASON,
 a.PLAYER_ID,
@@ -149,7 +157,7 @@ join
 (select season,bowler,sum(DOTS) as DOTS
 from dot_balls a
 group by 1,2) b on a.season=b.season and a.player_id=b.bowler
-
+order by b.DOTS desc
 
 ---------BBF_Innings ---
 
