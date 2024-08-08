@@ -159,26 +159,102 @@ from dot_balls a
 group by 1,2) b on a.season=b.season and a.player_id=b.bowler
 order by b.DOTS desc
 
----------BBF_Innings ---
+
+------------------------------------------------- Best Bowling Average -------------------------------------------------
+
+CREATE TABLE Best_Bowling_Average as 
+select  
+SEASON,
+PLAYER_ID,
+PLAYER_NAME,
+PLAYER_TEAM,
+MAT,
+INNS,
+OV,
+RUNS,
+WKTS,
+BBI,
+AVG,
+ECON,
+SR,
+"4W",
+"5W"
+from PURPLE_CAP 
+Order by season asc, AVG  asc;
+
+
+------------------------------------------------- Best Bowling Economy -------------------------------------------------
+
+CREATE TABLE Best_Bowling_Economy as 
+select  
+SEASON,
+PLAYER_ID,
+PLAYER_NAME,
+PLAYER_TEAM,
+MAT,
+INNS,
+OV,
+RUNS,
+WKTS,
+BBI,
+AVG,
+ECON,
+SR,
+"4W",
+"5W"
+from PURPLE_CAP 
+Order by season asc, ECON  asc;
+
+------------------------------------------------- Best Bowling Strike Rate -------------------------------------------------
+
+CREATE TABLE Best_Bowling_Strike_Rate as 
+select  
+SEASON,
+PLAYER_ID,
+PLAYER_NAME,
+PLAYER_TEAM,
+MAT,
+INNS,
+OV,
+RUNS,
+WKTS,
+BBI,
+AVG,
+ECON,
+SR,
+"4W",
+"5W"
+from PURPLE_CAP 
+Order by season asc, SR  asc;
+
+
+----- Stats At innings/match level -----
+-- Most Dot Balls (innings)
+-- Best_Bowling_Strike_Rate (innings)
+-- Best_Bowling_Strike_Rate  (innings)
+-- Most_Runs_Conceded (innings)
+-- Best_Bowling_Figures_innings
+
+-------------------------------------------------Best_Bowling_Figures_innings -------------------------------------------------
 
 
 drop table over_ball_count
-CREATE TABLE over_ball_count as 
+CREATE TABLE over_ball_count as    -- at over level 
 select 
 season,
 match_id,
 bowler,
 over_id,
-sum(case when bowler_extras=0 then 1 else 0 end) as ball_count,
-sum(case when bowler_wicket=1 then 1 else 0 end) as over_wickets,
-sum(runs_scored+bowler_extras) as runs
-from cricket_match_data  --where bowler=102 and match_id=336010
+sum(case when bowler_extras=0 then 1 else 0 end) as ball_count,  --balls bowled ignoring extra balls bowled by bowler
+sum(case when bowler_wicket=1 then 1 else 0 end) as over_wickets,  -- wickets taken in each over
+sum(runs_scored+bowler_extras) as runs  --runs conceded in each over
+from cricket_match_data 
 group by 1,2,3,4
-order by bowler
 
 
 
-CREATE TABLE bbi_innings as 
+
+CREATE TABLE Best_Bowling_Figures_innings_stg as 
 select a.season,
 a.match_id,
 a.bowler,
@@ -202,7 +278,7 @@ left join
 (select season,match_id,bowler,ball_count
 from over_ball_count where ball_count<6) b on a.season=b.season and a.match_id=b.match_id and a.bowler=b.bowler
 left join 
-(select season,match_id,bowler,sum(runs) as runs,count(over_wickets) as wkts from over_ball_count group by 1,2,3) c
+(select season,match_id,bowler,sum(runs) as runs,sum(over_wickets) as wkts from over_ball_count group by 1,2,3) c
 on a.season=c.season and a.match_id=c.match_id and a.bowler=c.bowler
 left join 
 player_match d on a.bowler=d.player_id and a.season=d.season_year and a.match_id=d.match_id 
@@ -210,8 +286,25 @@ left join
 matches e on a.season=e.season_year and a.match_id=e.match_id 
 
 
----mos dot balls in innings -----
+CREATE TABLE Best_Bowling_Figures_innings as 	
+select  season,
+	player_id,
+	player_name,
+	player_team,
+	BBI,
+	OV,
+	RUNS,
+	WKTS,
+	SR,
+	AGNAIST,
+	venue,
+	match_datr
+from Best_Bowling_Figures_innings_stg order by season asc, wkts desc;
+	
+	
+-------------------------------------------------Most_Dot_Balls_Innings-------------------------------------------------
 
+CREATE TABLE Most_Dot_Balls_Innings as 	
 select 
 a.season,
 a.bowler as player_id,
@@ -227,12 +320,13 @@ b.venue,
 b.match_date
 from dot_balls a
 left join 
-bbi_innings b on a.match_id=b.match_id and a.season=b.season and a.bowler=b.bowler
+Best_Bowling_Figures_innings_stg b on a.match_id=b.match_id and a.season=b.season and a.bowler=b.bowler
 order by a.season asc , dots desc
 
 
-------MOST ECON Bowler by innings -----
+------------------------------------------------- Best_Bowling_Economy_Innings -------------------------------------------------
 
+CREATE TABLE Best_Bowling_Economy_Innings as 		
 select 
 a.season,
 a.bowler as player_id,
@@ -249,23 +343,21 @@ b.venue,
 b.match_date
 from dot_balls a
 left join 
-bbi_innings b on a.match_id=b.match_id and a.season=b.season and a.bowler=b.bowler
+Best_Bowling_Figures_innings_stg b on a.match_id=b.match_id and a.season=b.season and a.bowler=b.bowler
 where cast(b.ov as decimal)>1
 order by a.season asc , ECON asc
 
+-------------------------------------------------Best_Bowling_Strike_Rate_Innings -------------------------------------------------
 
-
-------- Most Runs Conceded ---
-
-cREATE TABLE match_played_player as 
-select season,match_id,bowler
-from cricket_match_data a
-join player_data b on a.bowler=b.player_id 
+CREATE TABLE bowler_played_matches as 
+select 
+	season,match_id,bowler
+from cricket_match_data a 
 group by 1,2,3
-
+	
+CREATE TABLE Best_Bowling_Strike_Rate_Innings as 	
 select 
 a.season,
-a.match_id,
 a.bowler as player_id,
 b.player_name,
 b.player_team,
@@ -276,64 +368,51 @@ b.sr,
 b.AGNAIST,
 b.venue,
 b.match_date
-from match_played_player a
+from bowler_played_matches a
 left join 
-bbi_innings b on a.match_id=b.match_id and a.season=b.season and a.bowler=b.bowler
+Best_Bowling_Figures_innings_stg b on a.match_id=b.match_id and a.season=b.season and a.bowler=b.bowler
+where b.wkts>1 
+order by a.season asc , sr asc;
+
+
+------------------------------------------------- Most_Runs_Conceded_Innings -------------------------------------------------
+
+CREATE TABLE Most_Runs_Conceded_Innings as 
+select 
+a.season,
+a.bowler as player_id,
+b.player_name,
+b.player_team,
+b.ov,
+b.runs,
+b.wkts,
+b.sr,
+b.AGNAIST,
+b.venue,
+b.match_date
+from bowler_played_matches a
+left join 
+Best_Bowling_Figures_innings_stg b on a.match_id=b.match_id and a.season=b.season and a.bowler=b.bowler
 order by a.season asc , runs desc
 
 
-------MOST Strike rate of Bowler by innings -----
 
 
+------------------------------------------------- HATRIC -------------------------------------------------------------------------
+
+
+create TEMPORARY TABLE bowler_over_order_wicket_cnt  as
 select 
-a.season,
-a.match_id,
-a.bowler as player_id,
-b.player_name,
-b.player_team,
-b.ov,
-b.runs,
-b.wkts,
-b.sr,
-b.AGNAIST,
-b.venue,
-b.match_date
-from match_played_player a
-left join 
-bbi_innings b on a.match_id=b.match_id and a.season=b.season and a.bowler=b.bowler
-where b.wkts>1 
-order by a.season asc , sr asc
-
-
--------- HATRIC -------------------------------------------------------------------------
---------------------------------
-drop table bowler_over_id_rank
-CREATE  TEMPORARY TABLE bowler_over_id_rank AS
-select 
-a.season,a.bowler, a.match_id,a.over_id,is_wicket_taken,
+a.season,a.bowler, a.match_id,a.over_id,is_wicket_taken,over_wicket_cnt,
 row_number() over(partition by a.season,a.match_id,a.bowler order by a.over_id asc) as over_order_num
 from 
 (SELECT 
-season,bowler, match_id,over_id,max(bowler_wicket) as is_wicket_taken
+season,bowler, match_id,over_id,max(bowler_wicket)as is_wicket_taken,sum(bowler_wicket) as over_wicket_cnt
 from cricket_match_data 
 group by 1,2,3,4) a
 
-drop table bowler_over_wicket_cnt
-CREATE  TEMPORARY TABLE bowler_over_wicket_cnt AS
-select season,bowler, match_id,over_id,
-sum( bowler_wicket) as over_wicket_cnt
-from cricket_match_data 
-group by 1,2,3,4
+	
 
-drop table bowler_over_order_wicket_cnt
-CREATE  TEMPORARY TABLE bowler_over_order_wicket_cnt AS
-select a.season,a.bowler, a.match_id,a.over_id,a.is_wicket_taken,a.over_order_num,b.over_wicket_cnt
-from bowler_over_id_rank a 
-join 
-bowler_over_wicket_cnt b on a.season=b.season
-and a.match_id=b.match_id and a.bowler=b.bowler and a.over_id=b.over_id
-
-drop table bowler_current_over_next_over
 CREATE  TEMPORARY TABLE bowler_current_over_next_over AS
 select 
 a.season,a.bowler,a.match_id,
@@ -350,7 +429,7 @@ join
 bowler_over_order_wicket_cnt b on a.season=b.season and a.match_id=b.match_id 
                               and a.bowler=b.bowler and a.over_order_num+1=b.over_order_num
 
-drop table bowler_cont_wick_taken_overs
+
 CREATE  TEMPORARY TABLE bowler_cont_wick_taken_overs AS
 select a.*,b.player_name from bowler_current_over_next_over  a
 join player_data b on a.bowler=b.player_id
@@ -360,15 +439,13 @@ where
 (current_over_over_wicket_cnt>=1 and next_over_over_wicket_cnt>=2) or
 (current_over_over_wicket_cnt>=2 and next_over_over_wicket_cnt>=1)
 
-select * from bowler_cont_wick_taken_overs
-
-drop table wicket_taken_balls
+	
 CREATE  TEMPORARY TABLE wicket_taken_balls AS
 select  
 season,bowler,match_id,over_id,ball_id
 from cricket_match_data where  bowler_wicket=1 
 
-drop table overs_with_contunious_wickets
+	
 CREATE  TEMPORARY TABLE overs_with_contunious_wickets AS
 select a.*,
 row_number() over(partition by a.season,a.match_id,a.bowler order by a.over_id,a.ball_id) as rnk
@@ -399,8 +476,24 @@ overs_with_contunious_wickets c
 where a.season=b.season and a.match_id=b.match_id and a.bowler=b.bowler and a.rnk+1=b.rnk
 and b.season=c.season and b.match_id=c.match_id and b.bowler=c.bowler and b.rnk+1=c.rnk
 
-
- select a.* from 
+CREATE  TABLE HATRICKS AS
+select 
+hatrick_count.season,
+hatrick_count.bowler as player_id,
+pc.player_name,
+pc.player_team,
+hatrick_count.HAT_TRICKS,
+pc.mat,
+pc.inns,
+pc.ov,
+pc.runs,
+pc.wkts,
+pc.avg,
+pc.sr,
+pc."4W",
+pc."5W"
+from
+ (select a.season,a.bowler,count(*) as HAT_TRICKS from 
  (select season,bowler,b.player_name,
  case when over_id_1=over_id_2 and over_id_2=over_id_3
            and (ball_id_1+1=ball_id_2 and ball_id_2+1=ball_id_3) then 'YES' --Hartick in same Over
@@ -413,4 +506,8 @@ and b.season=c.season and b.match_id=c.match_id and b.bowler=c.bowler and b.rnk+
  join 
   Player_data b on a.bowler=b.player_id
  ) a where HATRICK='YES'
- order by season asc
+ group by 1,2
+) hatrick_count
+join PURPLE_CAP PC on hatrick_count.season=pc.season and hatrick_count.bowler=pc.player_id
+ order by season asc;
+ 
