@@ -247,3 +247,193 @@ bf,
 "6S",
 "4S"
 from ORANGE_CAP order by season_year asc, "sr" desc
+
+------------------------------------------ Best_Batting_Averages ------------------------------------------
+
+
+CREATE TABLE Best_Batting_Averages AS 
+select 
+season_year,
+Player,
+player_name,
+player_team,
+"AVG",
+mat,
+inns,
+no,
+runs,
+hs,
+bf,
+sr,
+"100",
+"50",
+"6S",
+"4S"
+from ORANGE_CAP order by season_year asc, "AVG" desc
+	
+
+------------------------------------------ ------------------------------------------
+---- Innings level stats 
+----Most fours 
+--- Most sixes
+---- Fastest Fifty
+---- Fastest Centuries
+----
+------------------------------------------------------------------------------------
+
+CREATE  TABLE most_fours_sixes AS
+select 
+a.season,
+p.player_name as PLAYER,
+a.runs_scored as RUNS,
+a.BF as BF,
+coalesce(ROUND((cast(NULLIF(a.runs_scored,0) as DECIMAL(10,2))/cast(NULLIF(a.BF,0) as decimal(10,2))*100),2),0) as SR,
+a.fours as "4S",
+a.sixes as "6S",
+a.AGAINST,
+m.venue_name as VENU,
+m.match_date as "MATCH DATE"
+from
+(select 
+match_id,
+season,
+striker,
+b.team_name as player_team,
+c.team_name as AGAINST ,
+sum(runs_scored) as runs_scored,
+sum(case when extra_type in ('No Extras','Byes','Legbyes','legbyes','byes') then 1 else 0 end ) as BF,
+sum (case when runs_scored=4 then 1 else 0 end ) as fours,
+sum (case when runs_scored=6 then 1 else 0 end ) as sixes
+from cricket_match_data a
+left join 
+ teams b on a.battingteam_sk=b.team_sk
+ left join 
+ teams c on a.bowlingteam_sk=c.team_sk
+group by 1,2,3,4,5
+order by season desc) a
+left join 
+matches m on a.match_id=m.match_id
+left join player_data p on p.player_id=a.striker
+
+------------------------------------------ Most fours in inns ------------------------------------------
+
+select * from most_fours_sixes order by season asc, "4S" desc;
+
+------------------------------------------ Most sixes in inns ------------------------------------------
+
+select * from most_fours_sixes order by season asc, "6S" desc;
+
+------------------------------------------ Fastest Fifties ------------------------------------------
+
+CREATE  TEMPORARY TABLE fastest_fifty_hundred AS
+select 
+match_id,
+season,
+striker,
+sum(runs_scored) over(partition by match_id,season,striker order by over_id asc, ball_id asc) as run_mark,
+row_number() over(partition by match_id,season,striker) as balls_faced_to_get_runs
+from cricket_match_data 
+where  extra_type in ('No Extras','Byes','Legbyes','legbyes','byes')
+
+
+CREATE  TEMPORARY TABLE fours_sixes AS
+select 
+a.match_id,
+a.season,
+a.striker,
+a.battingteam_sk,
+a.bowlingteam_sk,
+sum(a.runs_scored) as runs_scored,
+sum (case when runs_scored=4 then 1 else 0 end ) as fours,
+sum (case when runs_scored=6 then 1 else 0 end ) as sixes
+from cricket_match_data a
+group by 1,2,3,4,5
+
+----------
+Create Table Fastest_Fifties as
+select a.season,
+           a.player_name as PLAYER,
+	   b.player_team,
+	   b.runs_scored as RUNS, 
+	   a.balls_faced_to_get_to_fifty_runs as BF,
+	   Round((cast(b.runs_scored as DECIMAL(10,2))/cast(a.balls_faced_to_get_to_fifty_runs as DECIMAL(10,2))*100),2) as SR,
+           b.AGAINST,
+	   b.venue,
+	   b."MATCH DATE"	   
+from
+(select 
+match_id,
+season,
+striker,
+p.player_name,
+min(balls_faced_to_get_runs) as balls_faced_to_get_to_fifty_runs
+from 
+fastest_fifty_hundred a 
+left join
+player_data p on a.striker=p.player_id
+ where a.run_mark >=50 and a.run_mark <60
+group by 1,2,3,4 ) a
+left join 
+(select 
+a.match_id,
+a.season,
+a.striker,
+b.team_name as player_team,
+c.team_name as AGAINST ,
+m.venue_name as VENUE,
+m.match_date as "MATCH DATE",
+a.runs_scored,
+from fours_sixes a
+ left join
+teams b on a.battingteam_sk=b.team_sk
+ left join 
+teams c on a.bowlingteam_sk=c.team_sk
+ left join 
+matches m on a.match_id=m.match_id) b on a.match_id=b.match_id and a.season=b.season and a.striker=b.striker
+order by a.season asc, bf asc;
+
+------------------------------------------ Fastest Centuries ------------------------------------------
+Create Table Fastest_Centuries as
+select     a.season,
+           a.player_name as PLAYER,
+	   b.player_team,
+	   b.runs_scored as RUNS, 
+	   a.balls_faced_to_get_to_hundred_runs as BF,
+	   Round((cast(b.runs_scored as DECIMAL(10,2))/cast(a.balls_faced_to_get_to_hundred_runs as DECIMAL(10,2))*100),2) as SR,
+           b.AGAINST,
+	   b.venue,
+	   b."MATCH DATE"
+	   
+from
+(select 
+match_id,
+season,
+striker,
+p.player_name,
+min(balls_faced_to_get_runs) as balls_faced_to_get_to_hundred_runs
+from 
+fastest_fifty_hundred a 
+left join
+player_data p on a.striker=p.player_id
+ where a.run_mark >=100
+group by 1,2,3,4 ) a
+left join 
+	(select 
+	a.match_id,
+	a.season,
+	a.striker,
+	b.team_name as player_team,
+	c.team_name as AGAINST ,
+	m.venue_name as VENUE,
+	m.match_date as "MATCH DATE",
+	a.runs_scored,
+	from fours_sixes a
+left join
+	teams b on a.battingteam_sk=b.team_sk
+left join 
+	teams c on a.bowlingteam_sk=c.team_sk
+left join 
+	matches m on a.match_id=m.match_id) b on a.match_id=b.match_id and a.season=b.season and a.striker=b.striker
+order by a.season asc, bf asc;
+
+
