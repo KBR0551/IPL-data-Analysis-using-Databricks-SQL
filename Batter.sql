@@ -273,12 +273,12 @@ from ORANGE_CAP order by season_year asc, "AVG" desc
 	
 
 ------------------------------------------ ------------------------------------------
----- Innings level stats 
-----Most fours 
---- Most sixes
+- Innings level stats 
+---- Most fours 
+---  Most sixes
 ---- Fastest Fifty
 ---- Fastest Centuries
-----
+---- Best Batting Strike Rate
 ------------------------------------------------------------------------------------
 
 CREATE  TABLE most_fours_sixes AS
