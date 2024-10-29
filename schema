@@ -1,0 +1,112 @@
+
+ball_by_ball_stats_schema = StructType([
+    StructField("Match_id", IntegerType(), False),
+    StructField("Over_id", IntegerType(), True),
+    StructField("Ball_id", IntegerType(), True),
+    StructField("Innings_No", IntegerType(), True),
+    StructField("Team_Batting", IntegerType(), True),
+    StructField("Team_Bowling", IntegerType(), True),
+    StructField("Striker_Batting_Position", IntegerType(), True),
+    StructField("Extra_Type", StringType(), True),
+    StructField("Runs_Scored", IntegerType(), True),
+    StructField("Extra_runs", IntegerType(), True),
+    StructField("Wides", IntegerType(), True),
+    StructField("Legbyes", IntegerType(), True),
+    StructField("Byes", IntegerType(), True),
+    StructField("Noballs", IntegerType(), True),
+    StructField("Penalty", IntegerType(), True),
+    StructField("Bowler_Extras", IntegerType(), True),
+    StructField("Out_type", StringType(), True),
+    StructField("Caught", IntegerType(), True),
+    StructField("Bowled", IntegerType(), True),
+    StructField("Run_out", IntegerType(), True),
+    StructField("LBW", IntegerType(), True),
+    StructField("Retired_hurt", IntegerType(), True),
+    StructField("Stumped", IntegerType(), True),
+    StructField("caught_and_bowled", IntegerType(), True),
+    StructField("hit_wicket", IntegerType(), True),
+    StructField("ObstructingFeild", IntegerType(), True),
+    StructField("Bowler_Wicket", IntegerType(), True),
+    StructField("Match_Date", DateType(), True),
+    StructField("Season", IntegerType(), True),
+    StructField("Striker", IntegerType(), True),
+    StructField("Non_Striker", IntegerType(), True),
+    StructField("Bowler", IntegerType(), True),
+    StructField("Player_Out", IntegerType(), True),
+    StructField("Fielders", IntegerType(), True),
+    StructField("Striker_match_SK", IntegerType(), True),
+    StructField("StrikerSK", IntegerType(), True),
+    StructField("NonStriker_match_SK", IntegerType(), True),
+    StructField("NONStriker_SK", IntegerType(), True),
+    StructField("Fielder_match_SK", IntegerType(), True),
+    StructField("Fielder_SK", IntegerType(), True),
+    StructField("Bowler_match_SK", IntegerType(), True),
+    StructField("BOWLER_SK", IntegerType(), True),
+    StructField("PlayerOut_match_SK", IntegerType(), True),
+    StructField("BattingTeam_SK", IntegerType(), True),
+    StructField("BowlingTeam_SK", IntegerType(), True),
+    StructField("Keeper_Catch", IntegerType(), True),
+    StructField("Player_out_sk", IntegerType(), True),
+    StructField("MatchDateSK", IntegerType(), True)  
+])
+
+player_match_schema= StructType([
+    StructField("Player_match_SK", IntegerType(), False),
+    StructField("PlayerMatch_key", DecimalType(20, 0), False),  # DECIMAL(20)
+    StructField("Match_Id", IntegerType(), False),
+    StructField("Player_Id", IntegerType(), False),
+    StructField("Player_Name", StringType(), True),  # VARCHAR(255)
+    StructField("DOB", DateType(), True),  # DATE
+    StructField("Batting_hand", StringType(), True),  # VARCHAR(50)
+    StructField("Bowling_skill", StringType(), True),  # VARCHAR(50)
+    StructField("Country_Name", StringType(), True),  # VARCHAR(100)
+    StructField("Role_Desc", StringType(), True),  # VARCHAR(100)
+    StructField("Player_team", StringType(), True),  # VARCHAR(100)
+    StructField("Opposit_Team", StringType(), True),  # VARCHAR(100)
+    StructField("Season_year", IntegerType(), True),
+    StructField("is_manofThematch", IntegerType(), True),
+    StructField("Age_As_on_match", IntegerType(), True),
+    StructField("IsPlayers_Team_won", IntegerType(), True),
+    StructField("Batting_Status", StringType(), True),  # VARCHAR(50)
+    StructField("Bowling_Status", StringType(), True),  # VARCHAR(50)
+    StructField("Player_Captain", StringType(), True),  # VARCHAR(50)
+    StructField("Opposit_captain", StringType(), True),  # VARCHAR(50)
+    StructField("Player_keeper", StringType(), True),  # VARCHAR(50)
+    StructField("Opposit_keeper", StringType(), True)  # VARCHAR(50)
+])
+
+players_data_schema = StructType([
+    StructField("PLAYER_SK", IntegerType(), nullable=True),
+    StructField("Player_Id", IntegerType(), nullable=True),
+    StructField("Player_Name", StringType(), nullable=True),
+    StructField("DOB", DateType(), nullable=True),
+    StructField("Batting_hand", StringType(), nullable=True),
+    StructField("Bowling_skill", StringType(), nullable=True),
+    StructField("Country_Name", StringType(), nullable=True)
+])
+
+
+match_schema = StructType([
+    StructField("Match_SK", IntegerType(), nullable=False),
+    StructField("match_id", IntegerType(), nullable=False),
+    StructField("Team1", StringType(), nullable=True),
+    StructField("Team2", StringType(), nullable=True),
+    StructField("match_date", DateType(), nullable=True),
+    StructField("Season_Year", IntegerType(), nullable=True),
+    StructField("Venue_Name", StringType(), nullable=True),
+    StructField("City_Name", StringType(), nullable=True),
+    StructField("Country_Name", StringType(), nullable=True),
+    StructField("Toss_Winner", StringType(), nullable=True),
+    StructField("match_winner", StringType(), nullable=True),
+    StructField("Toss_Name", StringType(), nullable=True),
+    StructField("Win_Type", StringType(), nullable=True),
+    StructField("Outcome_Type", StringType(), nullable=True),
+    StructField("ManOfMach", StringType(), nullable=True),
+    StructField("Win_Margin", IntegerType(), nullable=True),
+    StructField("Country_id", IntegerType(), nullable=True)
+])
+
+teams_schema = StructType([
+    StructField("team_sk", IntegerType(), nullable=False),
+    StructField("team_id", IntegerType(), nullable=False),
+    StructField("team_name", StringType(), nullable=True)])
