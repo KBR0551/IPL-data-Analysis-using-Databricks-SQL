@@ -26,6 +26,10 @@ Data files Description:
 4) Match.csv -- Information about match venu, date, toss winner, captain etc
 5) Player_match.csv - Information about palyer played matches, his role, seasosn etc
 
-
+ETL Data Flow and Transformations sequence:
+1) IPL Data Analysis - Data Transform- Bronze to silver.ipynb
+2) IPL Data Analysis - Orange Cap Stats - SQL.ipynb
+3) IPL Data Analysis - Purple Cap Stats - SQL.ipynb
+4) IPL Data Analysis- Read from Gold Layer.ipynb
 
 
