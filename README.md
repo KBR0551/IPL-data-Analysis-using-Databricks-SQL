@@ -12,5 +12,6 @@ There a total of 25 reports, we will be using Joins, aggregate functions to achi
 All the stats are avalibale @ https://www.iplt20.com/stats/2008 I am trying to produce all the stats that are in the IPL website using the sample data from 2008 to 2017
 
 
-https://www.databricks.com/sites/default/files/inline-images/building-data-pipelines-with-delta-lake-120823.png?v=1702318922![image](https://github.com/user-attachments/assets/1f3f6d40-bc09-4acc-bdfd-1be591fb1076)
+
+![image](https://github.com/user-attachments/assets/4b69d057-c52d-43e1-9fd4-5dc373e33ef5)
 
