@@ -17,7 +17,13 @@ Below is the architecture the we are going to use for this use case. There are n
 
 ![image](https://github.com/user-attachments/assets/4b69d057-c52d-43e1-9fd4-5dc373e33ef5)
 
-User will upload data to DBFS file system in to bronze layer and do operations on top of it.
+User will upload data to DBFS file system in to bronze layer and do operations on top of it. Source data for this project is available in `data` directory of this repo.
 
+Data files Description:
+1) Ball_By_Ball.csv -- provides details about each ball bowler like runs, ball number, over number ,match_id etc.
+2) Team.csv -- list of IPL teams
+3) player.csv -- Provides information about each player played in ipl season
+4) Match.csv -- Information about match venu, date, toss winner, captain etc
+5) Player_match.csv - Information about palyer played matches, his role, seasosn etc
 
 
