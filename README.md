@@ -27,10 +27,16 @@ Data files Description:
 5) Player_match.csv - Information about palyer played matches, his role, seasosn etc
 
 ETL Data Flow and Transformations sequence:
- 1) IPL Data Analysis - Data Transform- Bronze to silver.ipynb
+ 1) IPL Data Analysis - Data Transform- Bronze to silver.ipynb 
  2) IPL Data Analysis - Orange Cap Stats - SQL.ipynb
  3) IPL Data Analysis - Purple Cap Stats - SQL.ipynb
  4) IPL Data Analysis- Read from Gold Layer.ipynb
+
+Link to above published notebooks:
+https://databricks-prod-cloudfront.cloud.databricks.com/public/4027ec902e239c93eaaa8714f173bcfc/2418033757997087/456113821613659/2092576197820195/latest.html
+https://databricks-prod-cloudfront.cloud.databricks.com/public/4027ec902e239c93eaaa8714f173bcfc/2418033757997087/502321478328215/2092576197820195/latest.html
+https://databricks-prod-cloudfront.cloud.databricks.com/public/4027ec902e239c93eaaa8714f173bcfc/2418033757997087/502321478328231/2092576197820195/latest.html
+https://databricks-prod-cloudfront.cloud.databricks.com/public/4027ec902e239c93eaaa8714f173bcfc/2418033757997087/3045803298173797/2092576197820195/latest.html
 
 Output Validation:
 
