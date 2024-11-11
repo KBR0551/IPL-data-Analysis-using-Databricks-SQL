@@ -33,7 +33,8 @@ ETL Data Flow and Transformations sequence:
  4) IPL Data Analysis- Read from Gold Layer.ipynb
 
 Output Validation:
-Each report in gold layer is comapred against the reports in https://www.iplt20.com/stats/2008 for accuracy.
+
+Each report in gold layer is comapred against the reports in https://www.iplt20.com/stats/2008 for at leat 95% accuracy, since this datasets are not from official IPL website.
 
 Purple Cap Comparision.
 
