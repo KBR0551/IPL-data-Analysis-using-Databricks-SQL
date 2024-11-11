@@ -32,14 +32,22 @@ ETL Data Flow and Transformations sequence:
  3) IPL Data Analysis - Purple Cap Stats - SQL.ipynb
  4) IPL Data Analysis- Read from Gold Layer.ipynb
 
+Output Validation:
+Each report in gold layer is comapred against the reports in https://www.iplt20.com/stats/2008 for accuracy.
+
+Purple Cap Comparision.
+
 ![image](https://github.com/user-attachments/assets/cae19097-e42e-43c0-aa15-20d59da36ebe)
 
 
 ![image](https://github.com/user-attachments/assets/e32b7452-7054-4453-aadd-bb7a6feb9613)
 
+Orange Cap Comparision
 
-Output Validation:
-Each report in gold layer is comapred against the reports in https://www.iplt20.com/stats/2008 for accuracy.
+![image](https://github.com/user-attachments/assets/9db84657-bf85-4ad8-bd4b-6640706ada46)
+
+![image](https://github.com/user-attachments/assets/85279344-82bf-49c8-b99c-6371ef419a50)
+
 
 Next Steps: 
 we look into performance imporovements
