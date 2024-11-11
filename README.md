@@ -27,10 +27,19 @@ Data files Description:
 5) Player_match.csv - Information about palyer played matches, his role, seasosn etc
 
 ETL Data Flow and Transformations sequence:
-1) IPL Data Analysis - Data Transform- Bronze to silver.ipynb
-2) IPL Data Analysis - Orange Cap Stats - SQL.ipynb
-3) IPL Data Analysis - Purple Cap Stats - SQL.ipynb
-4) IPL Data Analysis- Read from Gold Layer.ipynb
+  IPL Data Analysis - Data Transform- Bronze to silver.ipynb
+                     ||
+                     ||
+                     \/ 
+  IPL Data Analysis - Orange Cap Stats - SQL.ipynb
+                     ||
+                     ||
+                     \/ 
+  IPL Data Analysis - Purple Cap Stats - SQL.ipynb
+                     ||
+                     ||
+                     \/ 
+  IPL Data Analysis- Read from Gold Layer.ipynb
 
 Output Validation:
 Each report in gold layer is comapred against the reports in https://www.iplt20.com/stats/2008 for accuracy.
