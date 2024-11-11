@@ -32,6 +32,9 @@ ETL Data Flow and Transformations sequence:
  3) IPL Data Analysis - Purple Cap Stats - SQL.ipynb
  4) IPL Data Analysis- Read from Gold Layer.ipynb
 
+![image](https://github.com/user-attachments/assets/cae19097-e42e-43c0-aa15-20d59da36ebe)
+
+
 ![image](https://github.com/user-attachments/assets/e32b7452-7054-4453-aadd-bb7a6feb9613)
 
 
