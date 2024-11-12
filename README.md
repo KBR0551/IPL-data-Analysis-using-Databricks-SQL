@@ -57,5 +57,5 @@ Orange Cap Comparision
 
 
 Next Steps: 
-we look into performance imporovements
+we look into performance imporovements and implement the same in cloud.
 
