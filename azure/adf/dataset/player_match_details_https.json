@@ -1,0 +1,114 @@
+{
+	"name": "player_match_details_https",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDataLakeStorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "Player_match.csv",
+				"folderPath": "bronze",
+				"fileSystem": "ipldata"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Player_match_SK",
+				"type": "String"
+			},
+			{
+				"name": "PlayerMatch_key",
+				"type": "String"
+			},
+			{
+				"name": "Match_Id",
+				"type": "String"
+			},
+			{
+				"name": "Player_Id",
+				"type": "String"
+			},
+			{
+				"name": "Player_Name",
+				"type": "String"
+			},
+			{
+				"name": "DOB",
+				"type": "String"
+			},
+			{
+				"name": "Batting_hand",
+				"type": "String"
+			},
+			{
+				"name": "Bowling_skill",
+				"type": "String"
+			},
+			{
+				"name": "Country_Name",
+				"type": "String"
+			},
+			{
+				"name": "Role_Desc",
+				"type": "String"
+			},
+			{
+				"name": "Player_team",
+				"type": "String"
+			},
+			{
+				"name": "Opposit_Team",
+				"type": "String"
+			},
+			{
+				"name": "Season_year",
+				"type": "String"
+			},
+			{
+				"name": "is_manofThematch",
+				"type": "String"
+			},
+			{
+				"name": "Age_As_on_match",
+				"type": "String"
+			},
+			{
+				"name": "IsPlayers_Team_won",
+				"type": "String"
+			},
+			{
+				"name": "Batting_Status",
+				"type": "String"
+			},
+			{
+				"name": "Bowling_Status",
+				"type": "String"
+			},
+			{
+				"name": "Player_Captain",
+				"type": "String"
+			},
+			{
+				"name": "Opposit_captain",
+				"type": "String"
+			},
+			{
+				"name": "Player_keeper",
+				"type": "String"
+			},
+			{
+				"name": "Opposit_keeper",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
