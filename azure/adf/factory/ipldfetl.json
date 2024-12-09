@@ -1,9 +1,0 @@
-{
-	"name": "ipldfetl",
-	"location": "eastus",
-	"identity": {
-		"type": "SystemAssigned",
-		"principalId": "adf723f0-bf42-4850-a1ea-07297404b790",
-		"tenantId": "64f2b387-a093-4ec8-a3a3-cea9621cb63f"
-	}
-}
